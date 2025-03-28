@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setWishList } from "../redux/state";
+import url from "../url";
 
 const ListingCard = ({
   listingId,
@@ -49,18 +50,17 @@ const ListingCard = ({
 
   const patchWishList = async () => {
     if (user?._id !== creator._id) {
-    const response = await fetch(
-      `http://localhost:3001/users/${user?._id}/${listingId}`,
-      {
+      const response = await fetch(`${url}/users/${user?._id}/${listingId}`, {
         method: "PATCH",
         header: {
           "Content-Type": "application/json",
         },
-      }
-    );
-    const data = await response.json();
-    dispatch(setWishList(data.wishList));
-  } else { return }
+      });
+      const data = await response.json();
+      dispatch(setWishList(data.wishList));
+    } else {
+      return;
+    }
   };
 
   return (
@@ -78,7 +78,7 @@ const ListingCard = ({
           {listingPhotoPaths?.map((photo, index) => (
             <div key={index} className="slide">
               <img
-                src={`http://localhost:3001/${photo?.replace("public", "")}`}
+                src={`${url}/${photo?.replace("public", "")}`}
                 alt={`photo ${index + 1}`}
               />
               <div
@@ -113,7 +113,7 @@ const ListingCard = ({
         <>
           <p>{type}</p>
           <p>
-            <span>${price}</span> per night
+            <span>Rs{price}</span> per night
           </p>
         </>
       ) : (
@@ -122,7 +122,7 @@ const ListingCard = ({
             {startDate} - {endDate}
           </p>
           <p>
-            <span>${totalPrice}</span> total
+            <span>Rs {totalPrice}</span> total
           </p>
         </>
       )}

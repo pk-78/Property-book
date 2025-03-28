@@ -7,6 +7,7 @@ import Loader from "../components/Loader"
 import Navbar from "../components/Navbar";
 import ListingCard from "../components/ListingCard";
 import Footer from "../components/Footer"
+import url from "../url";
 
 const SearchPage = () => {
   const [loading, setLoading] = useState(true)
@@ -17,7 +18,7 @@ const SearchPage = () => {
 
   const getSearchListings = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/properties/search/${search}`, {
+      const response = await fetch(`${url}/properties/search/${search}`, {
         method: "GET"
       })
 

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTripList } from "../redux/state";
 import ListingCard from "../components/ListingCard";
 import Footer from "../components/Footer"
+import url from "../url";
 
 const TripList = () => {
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ const TripList = () => {
   const getTripList = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/users/${userId}/trips`,
+        `${url}/users/${userId}/trips`,
         {
           method: "GET",
         }

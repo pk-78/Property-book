@@ -5,6 +5,7 @@ import ListingCard from "./ListingCard";
 import Loader from "./Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setListings } from "../redux/state";
+import url from "../url";
 
 const Listings = () => {
   const dispatch = useDispatch();
@@ -18,8 +19,8 @@ const Listings = () => {
     try {
       const response = await fetch(
         selectedCategory !== "All"
-          ? `http://localhost:3001/properties?category=${selectedCategory}`
-          : "http://localhost:3001/properties",
+          ? `${url}/properties?category=${selectedCategory}`
+          : `${url}/properties`,
         {
           method: "GET",
         }
@@ -42,7 +43,9 @@ const Listings = () => {
       <div className="category-list">
         {categories?.map((category, index) => (
           <div
-            className={`category ${category.label === selectedCategory ? "selected" : ""}`}
+            className={`category ${
+              category.label === selectedCategory ? "selected" : ""
+            }`}
             key={index}
             onClick={() => setSelectedCategory(category.label)}
           >
@@ -56,33 +59,35 @@ const Listings = () => {
         <Loader />
       ) : (
         <div className="listings">
-          {listings.map(
-            ({
-              _id,
-              creator,
-              listingPhotoPaths,
-              city,
-              province,
-              country,
-              category,
-              type,
-              price,
-              booking=false
-            }) => (
-              <ListingCard
-                listingId={_id}
-                creator={creator}
-                listingPhotoPaths={listingPhotoPaths}
-                city={city}
-                province={province}
-                country={country}
-                category={category}
-                type={type}
-                price={price}
-                booking={booking}
-              />
-            )
-          )}
+          {listings.length == 0
+            ? "No Property in this category"
+            : listings.map(
+                ({
+                  _id,
+                  creator,
+                  listingPhotoPaths,
+                  city,
+                  province,
+                  country,
+                  category,
+                  type,
+                  price,
+                  booking = false,
+                }) => (
+                  <ListingCard
+                    listingId={_id}
+                    creator={creator}
+                    listingPhotoPaths={listingPhotoPaths}
+                    city={city}
+                    province={province}
+                    country={country}
+                    category={category}
+                    type={type}
+                    price={price}
+                    booking={booking}
+                  />
+                )
+              )}
         </div>
       )}
     </>

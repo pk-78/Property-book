@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import "../styles/Navbar.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { setLogout } from "../redux/state";
-
+import toast from "react-hot-toast";
+import url from "../url";
 
 const Navbar = () => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
@@ -15,9 +16,9 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
 
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="navbar">
@@ -25,20 +26,23 @@ const Navbar = () => {
         <img src="/assets/logo.png" alt="logo" />
       </a>
 
-      <div className="navbar_search">
-        <input
+      {/* <div className="navbar_search"> */}
+        {/* <input
           type="text"
           placeholder="Search ..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        
         <IconButton disabled={search === ""}>
           <Search
             sx={{ color: variables.pinkred }}
-            onClick={() => {navigate(`/properties/search/${search}`)}}
+            onClick={() => {
+              navigate(`/properties/search/${search}`);
+            }}
           />
-        </IconButton>
-      </div>
+        </IconButton> */}
+      {/* </div> */}
 
       <div className="navbar_right">
         {user ? (
@@ -60,7 +64,7 @@ const Navbar = () => {
             <Person sx={{ color: variables.darkgrey }} />
           ) : (
             <img
-              src={`http://localhost:3001/${user.profileImagePath.replace(
+              src={`${url}/${user.profileImagePath.replace(
                 "public",
                 ""
               )}`}
@@ -79,15 +83,16 @@ const Navbar = () => {
 
         {dropdownMenu && user && (
           <div className="navbar_right_accountmenu">
-            <Link to={`/${user._id}/trips`}>Trip List</Link>
-            <Link to={`/${user._id}/wishList`}>Wish List</Link>
-            <Link to={`/${user._id}/properties`}>Property List</Link>
+            <Link to={`/${user._id}/trips`}>Your Trip List</Link>
+            <Link to={`/${user._id}/wishList`}>Your Wish List</Link>
+            <Link to={`/${user._id}/properties`}>My Property List</Link>
             <Link to={`/${user._id}/reservations`}>Reservation List</Link>
-            <Link to="/create-listing">Become A Host</Link>
+            {/* <Link to="/create-listing">Become A Host</Link> */}
 
             <Link
               to="/login"
               onClick={() => {
+                toast.success("Logout Successfully");
                 dispatch(setLogout());
               }}
             >

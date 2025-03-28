@@ -1,46 +1,55 @@
 import React, { useState } from "react";
-import "../styles/Login.scss"
+import "../styles/Login.scss";
 import { setLogin } from "../redux/state";
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import url from "../url";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      const response = await fetch ("http://localhost:3001/auth/login", {
+      const response = await fetch(`${url}/auth/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password })
-      })
+        body: JSON.stringify({ email, password }),
+      });
 
       /* Get data after fetching */
-      const loggedIn = await response.json()
+      const loggedIn = await response.json();
+      console.log(loggedIn);
 
-      if (loggedIn) {
-        dispatch (
+      if (
+        loggedIn.message === "User doesn't exist!" ||
+        loggedIn.message === "Invalid Credentials!"
+      ) {
+        // alert("User doesnt exist");
+        toast.error("User does not exist or Invalid credentials");
+      } else if (loggedIn) {
+        dispatch(
           setLogin({
             user: loggedIn.user,
-            token: loggedIn.token
+            token: loggedIn.token,
           })
-        )
-        navigate("/")
+        );
+        toast.success("Welcome");
+        navigate("/");
       }
-
     } catch (err) {
-      console.log("Login failed", err.message)
+      console.log("Login failed", err.message);
     }
-  }
+  };
 
   return (
     <div className="login">
@@ -62,7 +71,7 @@ const LoginPage = () => {
           />
           <button type="submit">LOG IN</button>
         </form>
-        <a href="/register">Don't have an account? Sign In Here</a>
+        <a href="/register">Don't have an account? Sign Up Here</a>
       </div>
     </div>
   );
